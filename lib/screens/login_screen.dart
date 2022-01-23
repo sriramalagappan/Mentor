@@ -20,6 +20,53 @@ class _LoginPageState extends State<LoginPage> {
     _passwordController.dispose();
   }
 
+  /// Alert Modal
+  AlertModal(String title, String msg, String buttonText) {
+    showDialog<String>(
+      context: context,
+      builder: (BuildContext context) => AlertDialog(
+        title: Text(title),
+        content: Text(msg),
+        actions: <Widget>[
+          TextButton(
+            onPressed: () => Navigator.pop(context, 'OK'),
+            child: Text(buttonText),
+          ),
+        ],
+      ),
+    );
+  }
+
+  /// Email regex
+  RegExp emailRegExp = RegExp(
+    r"^[a-zA-Z0-9+_.-]+@[a-zA-Z0-9.-]+$",
+    caseSensitive: false,
+    multiLine: false,
+  );
+
+  /// Login to application
+  login() {
+    print(_emailController.text);
+    print(_passwordController.text);
+
+    // validate email with regex
+    if (!emailRegExp.hasMatch(_emailController.text)) {
+      // print alert if email is invalid and return
+      AlertModal("Invalid Email", "Please enter a valid email address", "Okay");
+      return;
+    }
+
+    // else, contiue
+
+    // TODO: Add a proper navigation 1 (this is temporary)
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => const MainNavigation(),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -140,15 +187,7 @@ class _LoginPageState extends State<LoginPage> {
                           child: ElevatedButton(
                             child: const Text('Login'),
                             onPressed: () {
-                              print(_emailController.text);
-                              print(_passwordController.text);
-                              // TODO: Add a proper navigation 1 (this is temporary)
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => const MainNavigation(),
-                                ),
-                              );
+                              login();
                             },
                           ),
                         ),
@@ -252,6 +291,56 @@ class _SignUpPageState extends State<SignUpPage> {
     super.dispose();
     _emailController.dispose();
     _passwordController.dispose();
+  }
+
+    /// Alert Modal
+  AlertModal(String title, String msg, String buttonText) {
+    showDialog<String>(
+      context: context,
+      builder: (BuildContext context) => AlertDialog(
+        title: Text(title),
+        content: Text(msg),
+        actions: <Widget>[
+          TextButton(
+            onPressed: () => Navigator.pop(context, 'OK'),
+            child: Text(buttonText),
+          ),
+        ],
+      ),
+    );
+  }
+
+  /// Email regex
+  RegExp emailRegExp = RegExp(
+    r"^[a-zA-Z0-9+_.-]+@[a-zA-Z0-9.-]+$",
+    caseSensitive: false,
+    multiLine: false,
+  );
+
+  /// Login to application
+  login() {
+    print(_emailController.text);
+    print(_passwordController.text);
+    print(_confirmPasswordController.text);
+
+    // validate email with regex
+    if (!emailRegExp.hasMatch(_emailController.text)) {
+      // print alert if email is invalid and return
+      AlertModal("Invalid Email", "Please enter a valid email address", "Okay");
+      return;
+    }
+
+    // validate passwords match
+    if (_passwordController.text != _confirmPasswordController.text) {
+      // print alert if passwords don't match
+      AlertModal("Passwords Don't Match", "The passwords do not match. Please check both fields and try again", "Okay");
+      return;
+    }
+
+    // else, contiue
+
+    // TODO: Add a proper navigation 3 (this is temporary)
+    Navigator.pop(context);
   }
 
   @override
